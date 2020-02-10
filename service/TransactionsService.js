@@ -1,5 +1,7 @@
 'use strict';
 
+const uuidv4 = require('uuid/v4');
+const state = require('../state/state');
 
 /**
  * Commit new transaction to the account
@@ -9,20 +11,16 @@
  **/
 exports.commitTransaction = function(body) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "amount" : 0.80082819046101150206595775671303272247314453125,
-  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-  "type" : "credit",
-  "effectiveDate" : "2000-01-23T04:56:07.000+00:00"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+    const transaction = {
+      id: uuidv4(),
+      type: body.type,
+      amount: body.amount,
+      effectiveDate: Date.now().toString(),
+    };
+    state.commitTransaction(transaction);
+    resolve(transaction);
   });
-}
+};
 
 
 /**
@@ -34,20 +32,9 @@ exports.commitTransaction = function(body) {
  **/
 exports.getTransactionById = function(transactionId) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "amount" : 0.80082819046101150206595775671303272247314453125,
-  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-  "type" : "credit",
-  "effectiveDate" : "2000-01-23T04:56:07.000+00:00"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+    resolve(state.resolveTransactionsByID(transactionId));
   });
-}
+};
 
 
 /**
@@ -57,23 +44,7 @@ exports.getTransactionById = function(transactionId) {
  **/
 exports.transactionsHistory = function() {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "amount" : 0.80082819046101150206595775671303272247314453125,
-  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-  "type" : "credit",
-  "effectiveDate" : "2000-01-23T04:56:07.000+00:00"
-}, {
-  "amount" : 0.80082819046101150206595775671303272247314453125,
-  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-  "type" : "credit",
-  "effectiveDate" : "2000-01-23T04:56:07.000+00:00"
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
+    resolve(state.resolveTransactionsHistory())
+  })
+};
 

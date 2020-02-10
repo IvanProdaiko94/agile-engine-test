@@ -5,8 +5,10 @@ var fs = require('fs'),
     http = require('http');
 
 var app = require('connect')();
+
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
+var morgan = require('morgan');
 var serverPort = 8080;
 
 // swaggerRouter configuration
@@ -34,6 +36,8 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
 
   // Serve the Swagger documents and Swagger UI
   app.use(middleware.swaggerUi());
+
+  app.use(morgan('combined'));
 
   // Start the server
   http.createServer(app).listen(serverPort, function () {
