@@ -6,3 +6,6 @@
 
 ## How to start?
 [Read](./app/README.md)
+
+## How to test?
+Load [this file](./agile-engine.postman_collection.json) (it is a collection) to Postman and test.
